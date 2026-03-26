@@ -7,9 +7,11 @@ import { generateWebarenaScript } from "@/lib/generateScript";
 
 interface GeneratedResult {
   ip: string;
+  rootPassword: string;
   proxyUser: string;
   proxyPassword: string;
   proxyPort: number;
+  sshPort: number;
   script: string;
 }
 
@@ -25,9 +27,11 @@ export default function Home() {
     });
     setResult({
       ip: data.ip,
+      rootPassword: data.rootPassword,
       proxyUser: data.proxyUser,
       proxyPassword: data.proxyPassword,
       proxyPort: data.proxyPort,
+      sshPort: 22,
       script,
     });
   };
@@ -47,9 +51,11 @@ export default function Home() {
         <div className="mt-8">
           <ScriptPanel
             ip={result.ip}
+            rootPassword={result.rootPassword}
             proxyUser={result.proxyUser}
             proxyPassword={result.proxyPassword}
             proxyPort={result.proxyPort}
+            sshPort={result.sshPort}
             script={result.script}
           />
         </div>
