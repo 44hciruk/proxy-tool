@@ -18,10 +18,10 @@ interface LogEntry {
 }
 
 const STATUS_ICON: Record<string, string> = {
-  running: "⏳",
-  ok: "✅",
-  error: "❌",
-  done: "🎉",
+  running: "...",
+  ok: "OK",
+  error: "NG",
+  done: "OK",
 };
 
 function CopyButton({ text, label }: { text: string; label?: string }) {
@@ -39,7 +39,7 @@ function CopyButton({ text, label }: { text: string; label?: string }) {
       onClick={handleCopy}
       className="shrink-0 rounded-md bg-gray-700 px-3 py-1.5 text-xs font-medium text-gray-200 transition hover:bg-gray-600 active:bg-gray-500"
     >
-      {copied ? "コピー済み ✓" : label || "📋 コピー"}
+      {copied ? "コピー済み" : label || "コピー"}
     </button>
   );
 }
@@ -59,6 +59,21 @@ function Section({
   );
 }
 
+function ProxyInfoBox({ compactInfo }: { compactInfo: string }) {
+  return (
+    <Section title="プロキシ接続情報">
+      <div className="rounded-lg border border-green-800 bg-green-950/40 p-4">
+        <div className="flex items-center gap-2">
+          <code className="flex-1 text-sm font-mono text-gray-100 break-all">
+            {compactInfo}
+          </code>
+          <CopyButton text={compactInfo} />
+        </div>
+      </div>
+    </Section>
+  );
+}
+
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "";
 
 export default function ScriptPanel({
@@ -71,9 +86,6 @@ export default function ScriptPanel({
   script,
 }: Props) {
   const sshCommand = `ssh root@${ip}`;
-  const proxyInfo = `${ip}:${proxyPort}`;
-  const curlCommand = `curl -x http://${proxyUser}:${proxyPassword}@${ip}:${proxyPort} http://httpbin.org/ip`;
-  const proxyInfoFull = `${proxyInfo}\n${proxyUser}\n${proxyPassword}`;
   const compactInfo = `${ip}:${proxyPort}:${proxyUser}:${proxyPassword}`;
 
   const [logs, setLogs] = useState<LogEntry[]>([]);
@@ -155,7 +167,7 @@ export default function ScriptPanel({
     <div className="space-y-6">
       {/* 自動セットアップ */}
       {API_URL && (
-        <Section title="⚡ 自動セットアップ">
+        <Section title="自動セットアップ">
           <p className="text-xs text-gray-500">
             バックエンドAPI経由でVPSに自動接続し、プロキシをセットアップします
           </p>
@@ -164,7 +176,7 @@ export default function ScriptPanel({
             disabled={autoRunning}
             className="w-full rounded-lg bg-emerald-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-emerald-500 active:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-50"
           >
-            {autoRunning ? "⏳ セットアップ中..." : "🚀 自動セットアップ"}
+            {autoRunning ? "セットアップ中..." : "自動セットアップ"}
           </button>
 
           {/* ログ表示 */}
@@ -173,8 +185,8 @@ export default function ScriptPanel({
               <div className="space-y-1.5">
                 {logs.map((log, i) => (
                   <div key={i} className="flex items-start gap-2 text-sm">
-                    <span className="shrink-0 w-5 text-center">
-                      {STATUS_ICON[log.status] || "•"}
+                    <span className="shrink-0 w-6 text-center text-xs text-gray-500">
+                      [{STATUS_ICON[log.status] || "•"}]
                     </span>
                     <span
                       className={
@@ -195,24 +207,12 @@ export default function ScriptPanel({
           )}
 
           {/* 完了結果 */}
-          {autoDone && (
-            <div className="rounded-lg border border-green-800 bg-green-950/40 p-4 space-y-3">
-              <h4 className="text-sm font-semibold text-green-400">
-                🎉 セットアップ完了！
-              </h4>
-              <div className="flex items-center gap-2">
-                <code className="flex-1 text-sm font-mono text-gray-100">
-                  {compactInfo}
-                </code>
-                <CopyButton text={compactInfo} />
-              </div>
-            </div>
-          )}
+          {autoDone && <ProxyInfoBox compactInfo={compactInfo} />}
 
           {autoError && !autoDone && (
             <div className="rounded-lg border border-red-800 bg-red-950/40 p-4">
               <p className="text-sm text-red-400">
-                ❌ セットアップに失敗しました。ログを確認してください。
+                セットアップに失敗しました。ログを確認してください。
               </p>
             </div>
           )}
@@ -228,7 +228,7 @@ export default function ScriptPanel({
           >
             <div className="flex-1 border-t border-gray-800" />
             <span className="text-xs text-gray-500 group-hover:text-gray-300 transition-colors">
-              {manualOpen ? "▼" : "▶"} または手動セットアップ
+              または手動セットアップ {manualOpen ? "-" : "+"}
             </span>
             <div className="flex-1 border-t border-gray-800" />
           </button>
@@ -237,8 +237,8 @@ export default function ScriptPanel({
 
       {manualOpen && !autoDone && (
         <>
-          {/* ① SSH接続コマンド */}
-          <Section title="① SSH接続コマンド">
+          {/* SSH接続コマンド */}
+          <Section title="SSH接続コマンド">
             <div className="flex items-center gap-2 rounded-lg border border-gray-700 bg-gray-900 p-3">
               <code className="flex-1 text-sm text-green-400 overflow-x-auto">
                 {sshCommand}
@@ -250,8 +250,8 @@ export default function ScriptPanel({
             </p>
           </Section>
 
-          {/* ② セットアップスクリプト */}
-          <Section title="② セットアップスクリプト">
+          {/* セットアップスクリプト */}
+          <Section title="セットアップスクリプト">
             <div className="rounded-lg border border-gray-700 bg-gray-900">
               <div className="flex items-center justify-between border-b border-gray-800 px-3 py-2">
                 <span className="text-xs text-gray-500">
@@ -267,42 +267,8 @@ export default function ScriptPanel({
         </>
       )}
 
-      {/* ③ プロキシ接続情報 */}
-      <Section title="③ プロキシ接続情報">
-        <div className="rounded-lg border border-green-800 bg-green-950/40 p-4">
-          <div className="space-y-2 text-sm">
-            <div className="flex justify-between">
-              <span className="text-gray-400">プロキシ</span>
-              <span className="font-mono text-gray-100">{proxyInfo}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-gray-400">ユーザー</span>
-              <span className="font-mono text-gray-100">{proxyUser}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-gray-400">パスワード</span>
-              <span className="font-mono text-gray-100">{proxyPassword}</span>
-            </div>
-          </div>
-          <div className="mt-3 flex flex-wrap gap-2">
-            <CopyButton text={proxyInfoFull} label="📋 接続情報をコピー" />
-            <CopyButton text={compactInfo} label="📋 IP:PORT:USER:PASS 形式でコピー" />
-          </div>
-        </div>
-      </Section>
-
-      {/* ④ 動作確認用curlコマンド */}
-      <Section title="④ 動作確認用 curl コマンド">
-        <div className="flex items-start gap-2 rounded-lg border border-gray-700 bg-gray-900 p-3">
-          <pre className="flex-1 text-xs text-yellow-300 overflow-x-auto whitespace-pre-wrap break-all">
-            {curlCommand}
-          </pre>
-          <CopyButton text={curlCommand} />
-        </div>
-        <p className="text-xs text-gray-500">
-          ローカルPCのターミナルで実行してプロキシの動作を確認
-        </p>
-      </Section>
+      {/* プロキシ接続情報（常に表示、自動完了時以外） */}
+      {!autoDone && <ProxyInfoBox compactInfo={compactInfo} />}
     </div>
   );
 }

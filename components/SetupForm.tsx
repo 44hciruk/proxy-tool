@@ -188,7 +188,7 @@ export default function SetupForm({ onGenerate }: Props) {
         type="submit"
         className="w-full rounded-lg bg-blue-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-blue-500 active:bg-blue-700"
       >
-        🚀 スクリプト生成
+        スクリプト生成
       </button>
     </form>
   );
