@@ -21,6 +21,7 @@ export default function Home() {
       proxyUser: data.proxyUser,
       proxyPassword: data.proxyPassword,
       proxyPort: data.proxyPort,
+      os: data.os,
     });
     setResult({
       ip: data.ip,
@@ -36,7 +37,7 @@ export default function Home() {
       <div className="text-center mb-8">
         <h1 className="text-2xl sm:text-3xl font-bold">VPS Proxy Setup Tool</h1>
         <p className="text-gray-400 text-sm mt-2">
-          WebArena VPS に Squid プロキシを構築するスクリプトを生成します
+          VPS に Squid プロキシを構築するスクリプトを生成します
         </p>
       </div>
 

@@ -1,9 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import type { OSType } from "@/lib/generateScript";
 
 export interface FormData {
   provider: string;
+  os: OSType;
   ip: string;
   rootPassword: string;
   proxyUser: string;
@@ -15,9 +17,18 @@ interface Props {
   onGenerate: (data: FormData) => void;
 }
 
+const OS_OPTIONS: { value: OSType; label: string; badge?: string }[] = [
+  { value: "centos6", label: "CentOS 6（レガシー）" },
+  { value: "almalinux", label: "AlmaLinux 8/9/10", badge: "推奨" },
+  { value: "rockylinux", label: "Rocky Linux 8/9/10", badge: "推奨" },
+  { value: "centos_stream", label: "CentOS Stream 9/10" },
+  { value: "ubuntu", label: "Ubuntu 20.04/22.04/24.04" },
+];
+
 export default function SetupForm({ onGenerate }: Props) {
   const [form, setForm] = useState<FormData>({
     provider: "webarena",
+    os: "almalinux",
     ip: "",
     rootPassword: "",
     proxyUser: "squid_test",
@@ -50,8 +61,47 @@ export default function SetupForm({ onGenerate }: Props) {
           onChange={(e) => set("provider", e.target.value)}
           className={inputClass}
         >
-          <option value="webarena">WebArena (CentOS 6)</option>
+          <option value="webarena">WebArena</option>
         </select>
+      </div>
+
+      {/* OS選択 */}
+      <div>
+        <label className={labelClass}>OS</label>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+          {OS_OPTIONS.map((opt) => (
+            <label
+              key={opt.value}
+              className={`flex items-center gap-2 rounded-lg border px-3 py-2.5 text-sm cursor-pointer transition ${
+                form.os === opt.value
+                  ? "border-blue-500 bg-blue-950/40 text-blue-300"
+                  : "border-gray-700 bg-gray-800 text-gray-300 hover:border-gray-600"
+              }`}
+            >
+              <input
+                type="radio"
+                name="os"
+                value={opt.value}
+                checked={form.os === opt.value}
+                onChange={(e) => set("os", e.target.value)}
+                className="sr-only"
+              />
+              <span
+                className={`h-3.5 w-3.5 shrink-0 rounded-full border-2 ${
+                  form.os === opt.value
+                    ? "border-blue-500 bg-blue-500"
+                    : "border-gray-500"
+                }`}
+              />
+              <span>{opt.label}</span>
+              {opt.badge && (
+                <span className="ml-auto rounded-full bg-green-900/60 px-2 py-0.5 text-[10px] font-semibold text-green-400">
+                  {opt.badge}
+                </span>
+              )}
+            </label>
+          ))}
+        </div>
       </div>
 
       {/* IP アドレス */}
