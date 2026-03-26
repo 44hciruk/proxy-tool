@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import type { OSType } from "@/lib/generateScript";
+import Tooltip from "@/components/Tooltip";
 
 export interface FormData {
   provider: string;
@@ -46,8 +47,7 @@ export default function SetupForm({ onGenerate }: Props) {
 
   const inputClass =
     "w-full rounded-lg border border-gray-700 bg-gray-800 px-3 py-2.5 text-sm text-gray-100 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500";
-  const labelClass = "block text-sm font-medium text-gray-300";
-  const descClass = "text-xs text-gray-400 mt-0.5 mb-1.5";
+  const labelClass = "flex items-center text-sm font-medium text-gray-300 mb-1";
 
   return (
     <form
@@ -107,8 +107,10 @@ export default function SetupForm({ onGenerate }: Props) {
 
       {/* IP アドレス */}
       <div>
-        <label className={labelClass}>IP アドレス</label>
-        <p className={descClass}>VPSのコントロールパネルに表示されているサーバーのIPアドレス</p>
+        <label className={labelClass}>
+          IP アドレス
+          <Tooltip text="VPSのコントロールパネルに表示されているサーバーのIPアドレスを入力してください" />
+        </label>
         <input
           type="text"
           required
@@ -121,8 +123,10 @@ export default function SetupForm({ onGenerate }: Props) {
 
       {/* rootパスワード */}
       <div>
-        <label className={labelClass}>root パスワード（サーバーのログインパスワード）</label>
-        <p className={descClass}>VPS契約時・インスタンス作成時に設定したサーバー管理者パスワード。SSHログインに使用します</p>
+        <label className={labelClass}>
+          root パスワード
+          <Tooltip text="VPS契約時・インスタンス作成時に設定したサーバー管理者パスワードです。SSHログインに使用します" />
+        </label>
         <input
           type="password"
           required
@@ -136,8 +140,10 @@ export default function SetupForm({ onGenerate }: Props) {
       {/* プロキシ認証 */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <label className={labelClass}>プロキシ ユーザー名</label>
-          <p className={descClass}>プロキシ接続時のBasic認証IDです。自由に決めてください</p>
+          <label className={labelClass}>
+            プロキシ ユーザー名
+            <Tooltip text="プロキシ接続時のBasic認証IDです。自由に決めてください" />
+          </label>
           <input
             type="text"
             required
@@ -148,8 +154,10 @@ export default function SetupForm({ onGenerate }: Props) {
           />
         </div>
         <div>
-          <label className={labelClass}>プロキシ パスワード</label>
-          <p className={descClass}>プロキシ接続時のBasic認証パスワードです。自由に決めてください</p>
+          <label className={labelClass}>
+            プロキシ パスワード
+            <Tooltip text="プロキシ接続時のBasic認証パスワードです。自由に決めてください" />
+          </label>
           <input
             type="password"
             required
@@ -163,8 +171,10 @@ export default function SetupForm({ onGenerate }: Props) {
 
       {/* プロキシポート */}
       <div className="w-full sm:w-1/3">
-        <label className={labelClass}>プロキシ ポート</label>
-        <p className={descClass}>50000のままで問題ありません（1025〜65535の範囲で変更可）</p>
+        <label className={labelClass}>
+          プロキシ ポート
+          <Tooltip text="プロキシの接続ポート番号です。50000のままで問題ありません（1025〜65535の範囲で変更可）" />
+        </label>
         <input
           type="number"
           value={form.proxyPort}
