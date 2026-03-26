@@ -15,7 +15,8 @@ export interface FormData {
 }
 
 interface Props {
-  onGenerate: (data: FormData) => void;
+  onSubmit: (data: FormData) => void;
+  disabled: boolean;
 }
 
 const OS_OPTIONS: { value: OSType; label: string; badge?: string }[] = [
@@ -26,7 +27,7 @@ const OS_OPTIONS: { value: OSType; label: string; badge?: string }[] = [
   { value: "ubuntu", label: "Ubuntu 20.04/22.04/24.04" },
 ];
 
-export default function SetupForm({ onGenerate }: Props) {
+export default function SetupForm({ onSubmit, disabled }: Props) {
   const [form, setForm] = useState<FormData>({
     provider: "webarena",
     os: "almalinux",
@@ -42,7 +43,7 @@ export default function SetupForm({ onGenerate }: Props) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onGenerate(form);
+    onSubmit(form);
   };
 
   const inputClass =
@@ -186,9 +187,10 @@ export default function SetupForm({ onGenerate }: Props) {
       {/* 送信 */}
       <button
         type="submit"
-        className="w-full rounded-lg bg-blue-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-blue-500 active:bg-blue-700"
+        disabled={disabled}
+        className="w-full rounded-lg bg-blue-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-blue-500 active:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
       >
-        スクリプト生成
+        {disabled ? "作成中..." : "プロキシを作成する"}
       </button>
     </form>
   );
