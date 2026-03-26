@@ -80,6 +80,7 @@ export default function ScriptPanel({
   const [autoRunning, setAutoRunning] = useState(false);
   const [autoDone, setAutoDone] = useState(false);
   const [autoError, setAutoError] = useState(false);
+  const [manualOpen, setManualOpen] = useState(!API_URL);
   const logBottomRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -218,42 +219,53 @@ export default function ScriptPanel({
         </Section>
       )}
 
-      {/* 区切り線 */}
-      {API_URL && (
-        <div className="flex items-center gap-3">
-          <div className="flex-1 border-t border-gray-800" />
-          <span className="text-xs text-gray-500">または手動セットアップ</span>
-          <div className="flex-1 border-t border-gray-800" />
+      {/* 手動セットアップ（アコーディオン） */}
+      {API_URL && !autoDone && (
+        <div>
+          <button
+            onClick={() => setManualOpen((v) => !v)}
+            className="flex items-center gap-3 w-full group"
+          >
+            <div className="flex-1 border-t border-gray-800" />
+            <span className="text-xs text-gray-500 group-hover:text-gray-300 transition-colors">
+              {manualOpen ? "▼" : "▶"} または手動セットアップ
+            </span>
+            <div className="flex-1 border-t border-gray-800" />
+          </button>
         </div>
       )}
 
-      {/* ① SSH接続コマンド */}
-      <Section title="① SSH接続コマンド">
-        <div className="flex items-center gap-2 rounded-lg border border-gray-700 bg-gray-900 p-3">
-          <code className="flex-1 text-sm text-green-400 overflow-x-auto">
-            {sshCommand}
-          </code>
-          <CopyButton text={sshCommand} />
-        </div>
-        <p className="text-xs text-gray-500">
-          ターミナルで実行し、rootパスワードを入力してVPSに接続してください
-        </p>
-      </Section>
+      {manualOpen && !autoDone && (
+        <>
+          {/* ① SSH接続コマンド */}
+          <Section title="① SSH接続コマンド">
+            <div className="flex items-center gap-2 rounded-lg border border-gray-700 bg-gray-900 p-3">
+              <code className="flex-1 text-sm text-green-400 overflow-x-auto">
+                {sshCommand}
+              </code>
+              <CopyButton text={sshCommand} />
+            </div>
+            <p className="text-xs text-gray-500">
+              ターミナルで実行し、rootパスワードを入力してVPSに接続してください
+            </p>
+          </Section>
 
-      {/* ② セットアップスクリプト */}
-      <Section title="② セットアップスクリプト">
-        <div className="rounded-lg border border-gray-700 bg-gray-900">
-          <div className="flex items-center justify-between border-b border-gray-800 px-3 py-2">
-            <span className="text-xs text-gray-500">
-              VPSのターミナルに貼り付けて実行
-            </span>
-            <CopyButton text={script} />
-          </div>
-          <pre className="max-h-72 overflow-auto p-3 text-xs leading-relaxed text-gray-300">
-            {script}
-          </pre>
-        </div>
-      </Section>
+          {/* ② セットアップスクリプト */}
+          <Section title="② セットアップスクリプト">
+            <div className="rounded-lg border border-gray-700 bg-gray-900">
+              <div className="flex items-center justify-between border-b border-gray-800 px-3 py-2">
+                <span className="text-xs text-gray-500">
+                  VPSのターミナルに貼り付けて実行
+                </span>
+                <CopyButton text={script} />
+              </div>
+              <pre className="max-h-72 overflow-auto p-3 text-xs leading-relaxed text-gray-300">
+                {script}
+              </pre>
+            </div>
+          </Section>
+        </>
+      )}
 
       {/* ③ プロキシ接続情報 */}
       <Section title="③ プロキシ接続情報">
