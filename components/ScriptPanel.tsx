@@ -104,8 +104,9 @@ export default function ScriptPanel({
               <span className="font-mono text-gray-100">{proxyPassword}</span>
             </div>
           </div>
-          <div className="mt-3">
+          <div className="mt-3 flex flex-wrap gap-2">
             <CopyButton text={proxyInfoFull} label="📋 接続情報をコピー" />
+            <CopyButton text={`${ip}:${proxyPort}:${proxyUser}:${proxyPassword}`} label="📋 IP:PORT:USER:PASS 形式でコピー" />
           </div>
         </div>
       </Section>
