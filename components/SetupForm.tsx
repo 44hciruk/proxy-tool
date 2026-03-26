@@ -46,7 +46,8 @@ export default function SetupForm({ onGenerate }: Props) {
 
   const inputClass =
     "w-full rounded-lg border border-gray-700 bg-gray-800 px-3 py-2.5 text-sm text-gray-100 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500";
-  const labelClass = "block text-sm font-medium text-gray-300 mb-1";
+  const labelClass = "block text-sm font-medium text-gray-300";
+  const descClass = "text-xs text-gray-400 mt-0.5 mb-1.5";
 
   return (
     <form
@@ -107,6 +108,7 @@ export default function SetupForm({ onGenerate }: Props) {
       {/* IP アドレス */}
       <div>
         <label className={labelClass}>IP アドレス</label>
+        <p className={descClass}>VPSのコントロールパネルに表示されているサーバーのIPアドレス</p>
         <input
           type="text"
           required
@@ -119,11 +121,12 @@ export default function SetupForm({ onGenerate }: Props) {
 
       {/* rootパスワード */}
       <div>
-        <label className={labelClass}>root パスワード</label>
+        <label className={labelClass}>root パスワード（サーバーのログインパスワード）</label>
+        <p className={descClass}>VPS契約時・インスタンス作成時に設定したサーバー管理者パスワード。SSHログインに使用します</p>
         <input
           type="password"
           required
-          placeholder="SSH接続用"
+          placeholder="VPS作成時に設定したパスワード"
           value={form.rootPassword}
           onChange={(e) => set("rootPassword", e.target.value)}
           className={inputClass}
@@ -134,9 +137,11 @@ export default function SetupForm({ onGenerate }: Props) {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
           <label className={labelClass}>プロキシ ユーザー名</label>
+          <p className={descClass}>プロキシ接続時のBasic認証IDです。自由に決めてください</p>
           <input
             type="text"
             required
+            placeholder="squid_test"
             value={form.proxyUser}
             onChange={(e) => set("proxyUser", e.target.value)}
             className={inputClass}
@@ -144,10 +149,11 @@ export default function SetupForm({ onGenerate }: Props) {
         </div>
         <div>
           <label className={labelClass}>プロキシ パスワード</label>
+          <p className={descClass}>プロキシ接続時のBasic認証パスワードです。自由に決めてください</p>
           <input
             type="password"
             required
-            placeholder="プロキシ認証用"
+            placeholder="プロキシ認証用パスワード"
             value={form.proxyPassword}
             onChange={(e) => set("proxyPassword", e.target.value)}
             className={inputClass}
@@ -158,6 +164,7 @@ export default function SetupForm({ onGenerate }: Props) {
       {/* プロキシポート */}
       <div className="w-full sm:w-1/3">
         <label className={labelClass}>プロキシ ポート</label>
+        <p className={descClass}>50000のままで問題ありません（1025〜65535の範囲で変更可）</p>
         <input
           type="number"
           value={form.proxyPort}
