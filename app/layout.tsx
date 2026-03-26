@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import pkg from "../package.json";
 
 export const metadata: Metadata = {
-  title: "VPS Proxy Setup Tool",
-  description: "WebArena VPSにSquidプロキシを自動構築するスクリプト生成ツール",
+  title: "Proxy Creator",
+  description: "VPS情報を入力してプロキシを作成できます",
 };
 
 export default function RootLayout({
@@ -13,8 +14,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ja">
-      <body className="bg-gray-950 text-gray-100 min-h-screen antialiased">
-        {children}
+      <body className="bg-gray-950 text-gray-100 min-h-screen antialiased flex flex-col">
+        <div className="flex-1">{children}</div>
+        <footer className="text-center text-sm text-gray-500 py-8">
+          Created by Dr.SK&nbsp;&nbsp;v{pkg.version}
+        </footer>
       </body>
     </html>
   );

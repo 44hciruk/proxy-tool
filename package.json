@@ -1,12 +1,15 @@
 {
   "name": "proxy-tool",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "release:patch": "npm version patch && git push && git push --tags && npx vercel --prod --yes",
+    "release:minor": "npm version minor && git push && git push --tags && npx vercel --prod --yes",
+    "release:major": "npm version major && git push && git push --tags && npx vercel --prod --yes"
   },
   "dependencies": {
     "next": "^14.2.0",
