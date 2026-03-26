@@ -98,7 +98,7 @@ export default function ScriptPanel({
     setAutoError(false);
 
     try {
-      const res = await fetch(`${API_URL}/setup/webarena`, {
+      const res = await fetch(`${API_URL}/setup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
