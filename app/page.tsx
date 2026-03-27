@@ -106,10 +106,10 @@ export default function Home() {
   return (
     <main className="max-w-3xl mx-auto px-4 py-8 sm:py-12">
       <div className="text-center mb-8 flex flex-col items-center">
-        <Image src="/logo.svg" alt="Proxy Creator" width={40} height={40} className="mb-3" />
-        <h1 className="text-2xl sm:text-3xl font-bold">Proxy Creator</h1>
+        <Image src="/logo.svg" alt="Proxy Generator by Dr.SK" width={40} height={40} className="mb-3" />
+        <h1 className="text-2xl sm:text-3xl font-bold">Proxy Generator by Dr.SK</h1>
         <p className="text-gray-400 text-sm mt-2">
-          VPS情報を入力してプロキシを作成できます
+          VPS情報を入力してプロキシを自動構築します
         </p>
       </div>
 
